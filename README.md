@@ -63,6 +63,31 @@ end
 ```
 `lib/swagger/` is a good place to place them..
 
+If you want create several different api specifications on the same application, you can mount the engine several times and
+configure the json files separated in entries on the hash using as hash key the root_path where the engine is mounted.
+
+```
+mount SwaggerEngine::Engine, at: "/admin_api/api-docs", as: "admin_api"
+mount SwaggerEngine::Engine, at: "/public_api/api-docs", as: "public_api"
+```
+
+```
+#config/initializers/swagger_engine.rb
+
+SwaggerEngine.configure do |config|
+  config.json_files = {
+    '/admin_api/api-docs/' => {
+      v1: 'lib/swagger/admin_api/v1.json',
+      v2: 'lib/swagger/admin_api/v2.json'
+    },
+    '/public_api/api-docs/' => {
+      v1: 'lib/swagger/public_api/v1.json',
+      v2: 'lib/swagger/public_api/v2.json'
+    }
+  }
+end
+```
+
 ### Edit your json files
 
 Use [Swagger editor](https://github.com/swagger-api/swagger-editor).

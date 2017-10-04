@@ -23,7 +23,12 @@ module SwaggerEngine
 
     private
     def load_json_files
-      @json_files ||= SwaggerEngine.configuration.json_files || { default: "#{Rails.root}/lib/swagger_engine/swagger.json" }
+      return @json_files if defined?(@json_files)
+      @json_files = if SwaggerEngine.configuration.json_files.present?
+        SwaggerEngine.configuration.json_files[root_path] || SwaggerEngine.configuration.json_files
+      else
+        { default: "#{Rails.root}/lib/swagger_engine/swagger.json" }
+      end
     end
   end
 end
